@@ -74,8 +74,70 @@ function GameController(
     board.selectBox(number, getActivePlayer().token);
 
     switchPlayerTurn();
-    printNewRound();
+
+    const checkWinner = () =>{
+
+        const currentBoard = board.getBoard();
+
+        let PlayerOneCount = 0;
+        let PlayerTwoCount = 0;
+        
+
+
+
+        //check row
+            //check if the row is all 'X' or all 'O'
+
+            for(let i = 0; i < currentBoard.length; i++){
+                for(let j = 0; j< 3; j++){
+                    if(currentBoard[i][j] === "X"){
+                        PlayerOneCount++;
+                        }
+                    else if(currentBoard[i][j] === "O"){
+                        PlayerTwoCount++;
+                    }
+                }
+                if (PlayerOneCount === 3 | PlayerTwoCount === 3){
+
+                    if (PlayerOneCount === 3){
+                        console.log("Player 1 wins!")
+                    }
+                    else{
+                        console.log("Player 2 wins!")
+                    }
+                    
+                    return true
+                }
+                else {
+                    PlayerOneCount = 0;
+                    PlayerTwoCount = 0;
+                }
+            }
+
+            //check columns
+
+            
+
+
+
+            return false;
+        };
+
+
+    if (checkWinner()) {
+
+        //end game
+        console.log("game over!")
+        printBoard();
+
+    }
+    else{
+        printNewRound();
+    }
+
   };
+
+
   printNewRound();
 
   return {
