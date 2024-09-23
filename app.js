@@ -35,7 +35,16 @@ function Gameboard() {
     }
   };
 
-  return { getBoard, printBoard, selectBox };
+  const resetBoard =() =>{
+    for (let i = 0; i < rows; i++) {
+        board[i] = [];
+        for (let j = 0; j < columns; j++) {
+          board[i][j] = i * columns + (j + 1);
+        }
+      }
+  };
+
+  return { getBoard, printBoard, selectBox, resetBoard };
 }
 
 function GameController(
@@ -75,6 +84,7 @@ function GameController(
 
     switchPlayerTurn();
 
+
     const checkWinner = () =>{
 
         const currentBoard = board.getBoard();
@@ -86,49 +96,142 @@ function GameController(
 
 
         //check row
-            //check if the row is all 'X' or all 'O'
+        //check if the row is all 'X' or all 'O'
 
-            for(let i = 0; i < currentBoard.length; i++){
-                for(let j = 0; j< 3; j++){
-                    if(currentBoard[i][j] === "X"){
-                        PlayerOneCount++;
-                        }
-                    else if(currentBoard[i][j] === "O"){
-                        PlayerTwoCount++;
-                    }
-                }
-                if (PlayerOneCount === 3 | PlayerTwoCount === 3){
+        for(let i = 0; i < currentBoard.length; i++){
+            for(let j = 0; j< 3; j++){
 
-                    if (PlayerOneCount === 3){
-                        console.log("Player 1 wins!")
+                let currentSpot = currentBoard[i][j]
+                
+                if(currentSpot === "X"){
+                    PlayerOneCount++;
                     }
-                    else{
-                        console.log("Player 2 wins!")
-                    }
-                    
-                    return true
-                }
-                else {
-                    PlayerOneCount = 0;
-                    PlayerTwoCount = 0;
+                else if(currentSpot === "O"){
+                    PlayerTwoCount++;
                 }
             }
+            if (PlayerOneCount === 3 | PlayerTwoCount === 3){
 
-            //check columns
-
-            
-
-
-
-            return false;
+                if (PlayerOneCount === 3){
+                    console.log("Player 1 wins!")
+                }
+                else{
+                    console.log("Player 2 wins!")
+                }
+                
+                return true
+            }
+            else {
+                PlayerOneCount = 0;
+                PlayerTwoCount = 0;
+            }
         };
+
+        //check columns
+
+        for(let i = 0; i < currentBoard.length; i++){
+            for(let j = 0; j< 3; j++){
+
+                let currentSpot = currentBoard[j][i]
+
+                if(currentSpot === "X"){
+                    PlayerOneCount++;
+                    }
+                else if(currentSpot === "O"){
+                    PlayerTwoCount++;
+                }
+            }
+            if (PlayerOneCount === 3 || PlayerTwoCount === 3){
+
+                if (PlayerOneCount === 3){
+                    console.log("Player 1 wins!")
+                }
+                else{
+                    console.log("Player 2 wins!")
+                }
+                
+                return true
+            }
+            else {
+                PlayerOneCount = 0;
+                PlayerTwoCount = 0;
+            }
+        };
+
+        //check diagonal 
+
+        //[00, 11, 22]
+        // [20, 11, 02]
+
+
+        //check diagonal going right
+        for (let i = 0; i < 3; i++) {
+            let currentSpot = currentBoard[i][i];
+            
+            if(currentSpot === "X"){
+                PlayerOneCount++;
+                }
+            else if(currentSpot === "O"){
+                PlayerTwoCount++;
+            }
+        };
+        if (PlayerOneCount === 3 || PlayerTwoCount === 3){
+
+            if (PlayerOneCount === 3){
+                console.log("Player 1 wins!")
+            }
+            else{
+                console.log("Player 2 wins!")
+            }
+            
+            return true
+        }
+        else {
+            PlayerOneCount = 0;
+            PlayerTwoCount = 0;
+        };
+
+        //check diagonal going left
+        let count = 2;
+        for (let i = 0; i < 3; i++) {
+            
+            let currentSpot = currentBoard[i][count];
+            console.log(currentSpot)
+            if(currentSpot === "X"){
+                PlayerOneCount++;
+                }
+            else if(currentSpot === "O"){
+                PlayerTwoCount++;
+            }
+            count--;
+        }
+        if (PlayerOneCount === 3 || PlayerTwoCount === 3){
+
+            if (PlayerOneCount === 3){
+                console.log("Player 1 wins!")
+            }
+            else{
+                console.log("Player 2 wins!")
+            }
+            
+            return true
+        }
+        else {
+            PlayerOneCount = 0;
+            PlayerTwoCount = 0;
+        }
+
+
+        return false;
+    };
 
 
     if (checkWinner()) {
 
         //end game
         console.log("game over!")
-        printBoard();
+        board.printBoard();
+        board.resetBoard()
 
     }
     else{
