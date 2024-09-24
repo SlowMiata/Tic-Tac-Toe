@@ -1,0 +1,25 @@
+body{
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+
+table{
+
+    
+}
+
+.tableRow{
+    border: 10px black solid;
+
+}
+
+.box{
+    border: 5px black solid;
+    padding: 0;
+    width: 200px;
+    height: 200px;
+
+}

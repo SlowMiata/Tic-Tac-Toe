@@ -1,5 +1,7 @@
 //DOM element
 
+const gameBoardTable = document.querySelector("#gameBoardTable")
+
 //Functions
 
 //game board object
@@ -8,6 +10,25 @@ function Gameboard() {
   const rows = 3;
   const columns = 3;
   const board = [];
+
+
+    for (let index = 0; index < 3; index++) {
+        const tableRow = document.createElement("tr");
+
+        tableRow.id = `row-${index}`;
+        tableRow.className = `tableRow`
+
+        for(let j = 0; j < 3; j++){
+            const rowBox = document.createElement("td");
+            rowBox.id = `box-${index * 3 +(j+1)}`
+            rowBox.className = `box`;
+            rowBox.setAttribute("box-number",index * 3 +(j+1))
+            tableRow.appendChild(rowBox);   
+        }
+
+        gameBoardTable.appendChild(tableRow)
+        
+    }
 
   for (let i = 0; i < rows; i++) {
     board[i] = [];
@@ -85,15 +106,34 @@ function GameController(
     switchPlayerTurn();
 
 
+    //need to check if there is a tie
+    const checkTie = () =>{
+
+        const currentBoard = board.getBoard();
+        let spot = 1;
+
+
+        for (let i = 0; i < currentBoard.length; i++) {
+            for (let j = 0; j < currentBoard.length; j++) {
+                if (currentBoard[i][j] === spot){
+                    return false;
+                } 
+                spot++;
+            }
+
+        }
+
+        return true;
+
+    }
+
+
     const checkWinner = () =>{
 
         const currentBoard = board.getBoard();
 
         let PlayerOneCount = 0;
         let PlayerTwoCount = 0;
-        
-
-
 
         //check row
         //check if the row is all 'X' or all 'O'
@@ -196,7 +236,6 @@ function GameController(
         for (let i = 0; i < 3; i++) {
             
             let currentSpot = currentBoard[i][count];
-            console.log(currentSpot)
             if(currentSpot === "X"){
                 PlayerOneCount++;
                 }
@@ -221,7 +260,6 @@ function GameController(
             PlayerTwoCount = 0;
         }
 
-
         return false;
     };
 
@@ -233,6 +271,11 @@ function GameController(
         board.printBoard();
         board.resetBoard()
 
+    }
+    else if(checkTie()){
+        console.log("game over! Tie!")
+        board.printBoard();
+        board.resetBoard()
     }
     else{
         printNewRound();
@@ -249,7 +292,24 @@ function GameController(
   };
 }
 
-const game = GameController();
+
+function ScreenController(){
+    const game = GameController();
+
+
+    const updateScreen = () =>{
+
+    }
+
+    const clickHandlerBoard = () =>{
+
+    }
+
+
+    return { };
+}
+
+const game = GameController()
 
 /*
 Focus on a console version of the game first
