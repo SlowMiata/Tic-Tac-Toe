@@ -1,8 +1,3 @@
-//DOM element
-
-const gameBoardTable = document.querySelector("#gameBoardTable")
-
-//Functions
 
 //game board object
 
@@ -12,23 +7,6 @@ function Gameboard() {
   const board = [];
 
 
-    for (let index = 0; index < 3; index++) {
-        const tableRow = document.createElement("tr");
-
-        tableRow.id = `row-${index}`;
-        tableRow.className = `tableRow`
-
-        for(let j = 0; j < 3; j++){
-            const rowBox = document.createElement("td");
-            rowBox.id = `box-${index * 3 +(j+1)}`
-            rowBox.className = `box`;
-            rowBox.setAttribute("box-number",index * 3 +(j+1))
-            tableRow.appendChild(rowBox);   
-        }
-
-        gameBoardTable.appendChild(tableRow)
-        
-    }
 
   for (let i = 0; i < rows; i++) {
     board[i] = [];
@@ -269,13 +247,12 @@ function GameController(
         //end game
         console.log("game over!")
         board.printBoard();
-        board.resetBoard()
 
     }
     else if(checkTie()){
         console.log("game over! Tie!")
         board.printBoard();
-        board.resetBoard()
+        
     }
     else{
         printNewRound();
@@ -289,29 +266,72 @@ function GameController(
   return {
     playRound,
     getActivePlayer,
+    getBoard: board.getBoard,
+    resetBoard: board.resetBoard,
   };
 }
 
 
 function ScreenController(){
+
+
+  const gameBoardTable = document.querySelector("#gameBoardTable")
+  const currentPlayer = document.querySelector("#currentPlayer")
+  const resetButton = document.querySelector("#resetButton")
+    //calls the GameController()
     const game = GameController();
 
 
+    
+    
+  
     const updateScreen = () =>{
+      //clears the old board
+      const board = game.getBoard();
+      gameBoardTable.innerHTML = ""
+
+      for (let index = 0; index < 3; index++) {
+        const tableRow = document.createElement("tr");
+        
+  
+        tableRow.id = `row-${index}`;
+        tableRow.classList = `tableRow`
+  
+        for(let j = 0; j < 3; j++){
+            const rowBox = document.createElement("td");
+            rowBox.id = `box-${index * 3 +(j+1)}`
+            rowBox.classList= `box`;
+            rowBox.setAttribute("box-number",index * 3 +(j+1))
+            rowBox.textContent = board[index][j]
+            rowBox.addEventListener("click",clickHandlerBoard)
+            tableRow.appendChild(rowBox);
+        }
+        gameBoardTable.appendChild(tableRow)
+        
+      }
 
     }
 
-    const clickHandlerBoard = () =>{
-
+    const resetEventHandler = () =>{
+      game.resetBoard()
+      updateScreen()
     }
+    resetButton.addEventListener("click",resetEventHandler);
 
+    const clickHandlerBoard = (event) =>{
+      const currentBox = event.target.getAttribute("box-number");
+      let currentPlayerToken = game.getActivePlayer()
 
-    return { };
-}
+      console.log(currentBox)
 
-const game = GameController()
+      game.playRound(parseInt(currentBox));
 
-/*
-Focus on a console version of the game first
-*/
+      updateScreen();
+
+    };
+    updateScreen();
+};
+
+ScreenController()
+
 
